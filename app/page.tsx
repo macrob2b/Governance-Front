@@ -1,16 +1,33 @@
 import Image from 'next/image'
+import ProposalList from './components/home/ProposalList'
+import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <p>
+    <div className="grid grid-rows-[10px_1fr_10px] items-center justify-items-center min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="flex flex-col gap-2 row-start-2 items-center sm:items-start">
+        <div className="d-flex">
+          <Link
+            href="/create-proposal"
+            className="btn btn-primary mb-8 mr-2"
+          >
+            Create Proposal
+          </Link>
+          <a
+            className="btn btn-success"
+            href="https://jup.ag/swap/USDC-BdLaNH3m6da2jXkx6XpGwLkUEKB4EbQWxLxntv5BuvAn"
+          >
+            Buy MB2B Token
+          </a>
+        </div>
+        <div className="prose">
+          <h1 className="mb-4 ">Prospsal List</h1>
+          <ProposalList />
+        </div>
+        {/* <p>
           For Review, Voting and Create Proposal Connect your Wallet and also
           you need first have some MB2B Token
-        </p>
-        <a href="https://jup.ag/swap/USDC-BdLaNH3m6da2jXkx6XpGwLkUEKB4EbQWxLxntv5BuvAn">
-          Buy MB2B Token
-        </a>
+        </p> */}
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a
