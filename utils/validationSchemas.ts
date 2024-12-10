@@ -9,6 +9,6 @@ export const titleSchema = z.string()
 
 
 export const briefSchema = z.string()
-    .min(50, { message: 'Title must be at least 150 characters long.' })
-    .max(800, { message: 'Title must not exceed 800 characters.' })
+    .min(150, { message: 'Brief must be at least 150 characters long.' })
+    .max(800, { message: 'Brief must not exceed 800 characters.' })
     .regex(/^[a-zA-Z0-9\s]+$/, { message: "Title can only contain letters, numbers, and spaces." });

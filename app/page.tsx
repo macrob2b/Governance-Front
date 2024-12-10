@@ -15,6 +15,7 @@ export default function Home() {
           </Link>
           <a
             className="btn btn-success"
+            target="_blank"
             href="https://jup.ag/swap/USDC-BdLaNH3m6da2jXkx6XpGwLkUEKB4EbQWxLxntv5BuvAn"
           >
             Buy MB2B Token

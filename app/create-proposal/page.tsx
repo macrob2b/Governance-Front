@@ -14,6 +14,7 @@ export default function CreateProposal() {
 
   const [isLoading, setIsLoading] = useState(false)
   const [title, setTitle] = useState('')
+  const [proposalType, setType] = useState('')
   const [brief, setBreif] = useState('')
   const [notice, setNotice] = useState({ msg: '', type: '' })
 
@@ -89,6 +90,32 @@ export default function CreateProposal() {
             placeholder="Title"
             className="input input-bordered w-full mb-4"
           />
+          <select
+            onChange={(e) => setType(e.target.value)}
+            className="select select-bordered w-full  mb-4"
+          >
+            <option value="idea">Initil Idea</option>
+            <option value="fund">Request Fund</option>
+          </select>
+
+          {proposalType === 'fund' && (
+            <div>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Initial Idea Id"
+                className="input input-bordered w-full mb-4"
+              />
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Amount"
+                className="input input-bordered w-full mb-4"
+              />
+            </div>
+          )}
           <div>
             <textarea
               className="textarea textarea-bordered w-full mb-4"
