@@ -11,7 +11,7 @@ export const getProvider = () => {
   }
 
   // Create a new connection to the Solana cluster
-  const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL_DEV
+  const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL
   if (!rpcUrl) throw new Error('Set rpc url')
   const connection = new Connection(rpcUrl, 'processed') // Change to your preferred cluster
 
