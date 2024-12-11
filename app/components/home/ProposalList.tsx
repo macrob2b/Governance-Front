@@ -2,16 +2,11 @@
 import { getProgram } from '@/utils/connectAnchorProgram' // Adjust the path as needed
 import { publicKey } from '@coral-xyz/anchor/dist/cjs/utils'
 import { ProgramAccount } from '@project-serum/anchor'
-
-import {
-  TransactionInstruction,
-  LAMPORTS_PER_SOL,
-  Transaction,
-  SystemProgram,
-  PublicKey
-} from '@solana/web3.js'
+import Link from 'next/link'
+import { PublicKey } from '@solana/web3.js'
 import { useEffect, useState, useCallback, useRef } from 'react'
 interface Proposal {
+  id: PublicKey
   owner: PublicKey
   title: string
   brief: string
@@ -19,12 +14,13 @@ interface Proposal {
 
 export default function ProposalList() {
   const [proposals, setProposals] = useState<Array<Proposal>>([])
+  const [listLoading, setListLoading] = useState(true)
 
   useEffect(() => {
-    getPlansByUser()
+    getProposalList()
   }, [])
 
-  const getPlansByUser = async () => {
+  const getProposalList = async () => {
     const program = getProgram()
 
     try {
@@ -43,6 +39,7 @@ export default function ProposalList() {
 
       const proposalArray: Proposal[] = proposals.map(
         (proposal: ProgramAccount<any>) => ({
+          id: proposal.publicKey,
           owner: proposal.account.owner, // Convert the owner publicKey to base58
           title: proposal.account.title,
           brief: proposal.account.brief
@@ -53,23 +50,59 @@ export default function ProposalList() {
     } catch (error) {
       console.error('Failed to fetch proposals:', error)
     } finally {
-      // setListIsLoading(false)
+      setListLoading(false)
     }
   }
 
   return (
     <div>
-      {proposals.map((proposal, index) => (
-        <div
-          key={index}
-          className="card bg-base-100 w-100 shadow-xl mb-1"
-        >
-          <div className="card-body">
-            <h3>{proposal.title}</h3>
-            <p>{proposal.brief}</p>
-          </div>
+      {!listLoading ? (
+        <div>
+          {proposals.length ? (
+            <div>
+              <table className="w-full lg:w-1/2 table-auto mx-auto mb-14">
+                <thead>
+                  <tr>
+                    <th className="text-left min-w-[180px]">Title</th>
+                    <th className="text-left min-w-[120px]">Type</th>
+                    <th className="text-left min-w-[120px]">Expiry Date</th>
+                    <th className="text-left min-w-[120px]">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {proposals.map((proposal, index) => (
+                    <tr key={index}>
+                      <td className="py-1">{proposal.title}</td>
+                      <td className="py-2">Unknown</td>
+                      <td className="py-2">Unknown</td>
+                      <td className="py-2">
+                        <Link
+                          href={`/proposal/${proposal.id}`}
+                          className="btn btn-outline btn-xs btn-success mr-1"
+                        >
+                          Show
+                        </Link>
+                        {/* <button className="btn btn-outline btn-xs btn-error ">
+                          Delete
+                        </button> */}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div>Opps! not found any proposal</div>
+          )}
         </div>
-      ))}
+      ) : (
+        <div className="text-center">
+          <span className="loading loading-ball loading-sm " />
+          <span className="loading loading-ball loading-sm" />
+          <span className="loading loading-ball loading-md" />
+          <span className="loading loading-ball loading-lg" />
+        </div>
+      )}
     </div>
   )
 }

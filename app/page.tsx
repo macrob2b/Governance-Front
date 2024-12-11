@@ -8,7 +8,7 @@ export default function Home() {
       <main className="flex flex-col gap-2 row-start-2 items-center sm:items-start">
         <div className="d-flex">
           <Link
-            href="/create-proposal"
+            href="/proposal/create"
             className="btn btn-primary mb-8 mr-2"
           >
             Create Proposal
@@ -22,7 +22,7 @@ export default function Home() {
           </a>
         </div>
         <div className="prose">
-          <h1 className="mb-4 ">Prospsal List</h1>
+          <h1 className="mb-4 text-lg font-bold ">Proposal List</h1>
           <ProposalList />
         </div>
         {/* <p>
