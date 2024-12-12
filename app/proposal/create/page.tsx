@@ -58,7 +58,7 @@ export default function CreateProposal() {
 
       // Call the `submit proposal` instruction defined in the IDL
       await program.methods
-        .submitProposal(title, brief)
+        .createProposal(title, brief)
         .accounts({
           proposal: proposal.publicKey,
           user: provider.wallet.publicKey,

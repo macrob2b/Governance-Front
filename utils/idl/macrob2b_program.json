@@ -3,7 +3,7 @@
   "name": "macrob2b_program",
   "instructions": [
     {
-      "name": "submitProposal",
+      "name": "createProposal",
       "accounts": [
         {
           "name": "proposal",
@@ -31,6 +31,22 @@
           "type": "string"
         }
       ]
+    },
+    {
+      "name": "deleteProposal",
+      "accounts": [
+        {
+          "name": "proposal",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -53,6 +69,13 @@
           }
         ]
       }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Unauthorized",
+      "msg": "Unauthorized to Action"
     }
   ]
 }
