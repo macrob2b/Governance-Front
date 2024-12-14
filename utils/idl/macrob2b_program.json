@@ -43,10 +43,41 @@
         {
           "name": "user",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         }
       ],
       "args": []
+    },
+    {
+      "name": "vote",
+      "accounts": [
+        {
+          "name": "proposal",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "voter",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "voteRecord",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "agree",
+          "type": "bool"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -66,6 +97,34 @@
           {
             "name": "brief",
             "type": "string"
+          },
+          {
+            "name": "agreeVotes",
+            "type": "u64"
+          },
+          {
+            "name": "disagreeVotes",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VoteRecord",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "proposalId",
+            "type": "publicKey"
+          },
+          {
+            "name": "voter",
+            "type": "publicKey"
+          },
+          {
+            "name": "hasVoted",
+            "type": "bool"
           }
         ]
       }
@@ -76,6 +135,11 @@
       "code": 6000,
       "name": "Unauthorized",
       "msg": "Unauthorized to Action"
+    },
+    {
+      "code": 6001,
+      "name": "AlreadyVoted",
+      "msg": "Already voted!"
     }
   ]
 }

@@ -1,13 +1,10 @@
 'use client'
-// import dynamic from 'next/dynamic'
-// const Editor = dynamic(() => import('../components/Editor'), {
-//   ssr: false
-// })
 import { getProgram } from '@/utils/connectAnchorProgram' // Adjust the path as needed
 import { web3, AnchorError, AnchorProvider } from '@project-serum/anchor'
 import { useState } from 'react'
 import { titleSchema, briefSchema } from '@/utils/validationSchemas'
 import { useWallet } from '@solana/wallet-adapter-react'
+import Link from 'next/link'
 
 export default function CreateProposal() {
   const { publicKey } = useWallet()
@@ -80,9 +77,11 @@ export default function CreateProposal() {
   }
 
   return (
-    <div className="flex items-center justify-center w-full min-h-screen p-8 pb-20">
+    <div className="flex items-top justify-center w-full min-h-screen p-8 pb-20">
       {publicKey ? (
         <div className="w-full max-w-lg">
+          <h1 className="my-4 text-lg font-bold">Create New Proposal</h1>
+
           <input
             type="text"
             value={title}
@@ -144,6 +143,12 @@ export default function CreateProposal() {
               <span className="loading loading-spinner loading-sm"></span>
             )}
           </button>
+          <Link
+            href="/"
+            className="btn btn-error btn-outline w-full mt-2"
+          >
+            Cancel
+          </Link>
 
           <p
             className={`text-center mt-4 ${
