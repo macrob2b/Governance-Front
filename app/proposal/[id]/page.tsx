@@ -152,7 +152,7 @@ export default function ShowProposal() {
                     <div>
                       <button
                         onClick={() => voteProposal()}
-                        className="btn btn-outline btn-success"
+                        className="btn btn-outline btn-success "
                       >
                         Agree
                       </button>
