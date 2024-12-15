@@ -29,6 +29,18 @@
         {
           "name": "brief",
           "type": "string"
+        },
+        {
+          "name": "cate",
+          "type": "string"
+        },
+        {
+          "name": "reference",
+          "type": "string"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
         }
       ]
     },
@@ -99,12 +111,32 @@
             "type": "string"
           },
           {
+            "name": "cate",
+            "type": "string"
+          },
+          {
+            "name": "reference",
+            "type": "string"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
             "name": "agreeVotes",
             "type": "u64"
           },
           {
             "name": "disagreeVotes",
             "type": "u64"
+          },
+          {
+            "name": "createdAt",
+            "type": "i64"
+          },
+          {
+            "name": "expiresAt",
+            "type": "i64"
           }
         ]
       }
@@ -125,6 +157,10 @@
           {
             "name": "hasVoted",
             "type": "bool"
+          },
+          {
+            "name": "vote",
+            "type": "string"
           }
         ]
       }

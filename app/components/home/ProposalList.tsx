@@ -12,6 +12,11 @@ interface Proposal {
   owner: PublicKey
   title: string
   brief: string
+  cate: string
+  reference: string
+  amount: string
+  createdAt: Date
+  expiresAt: Date
 }
 
 export default function ProposalList() {
@@ -30,26 +35,25 @@ export default function ProposalList() {
 
     try {
       // Fetch all accounts for the program where the owner is the user's public key
-      const proposals = await program.account.proposal
-        .all
-        // [
-        // {
-        //   memcmp: {
-        //     offset: 8, // Adjust based on where the owner field is in the Plan struct
-        //     bytes: userPublicKey.toBase58()
-        //   }
-        // }
-        // ]
-        ()
+      const proposals = await program.account.proposal.all()
+
+      console.log(proposals)
 
       const proposalArray: Proposal[] = proposals.map(
         (proposal: ProgramAccount<any>) => ({
           id: proposal.publicKey,
           owner: proposal.account.owner, // Convert the owner publicKey to base58
           title: proposal.account.title,
-          brief: proposal.account.brief
+          brief: proposal.account.brief,
+          cate: proposal.account.cate,
+          reference: proposal.account.reference,
+          amount: proposal.account.amount,
+          createdAt: new Date(proposal.account.createdAt.toNumber() * 1000),
+          expiresAt: new Date(proposal.account.expiresAt.toNumber() * 1000)
         })
       )
+
+      console.log(proposalArray)
 
       setProposals(proposalArray)
     } catch (error) {
@@ -108,8 +112,8 @@ export default function ProposalList() {
                 <thead>
                   <tr>
                     <th className="text-left min-w-[180px]">Title</th>
-                    <th className="text-left min-w-[120px]">Type</th>
-                    <th className="text-left min-w-[120px]">Expiry Date</th>
+                    <th className="text-left min-w-[180px]">Type</th>
+                    <th className="text-left min-w-[200px]">Expiry Date</th>
                     <th className="text-left min-w-[180px]">Action</th>
                   </tr>
                 </thead>
@@ -117,8 +121,14 @@ export default function ProposalList() {
                   {proposals.map((proposal, index) => (
                     <tr key={index}>
                       <td className="py-1">{proposal.title}</td>
-                      <td className="py-2">Unknown</td>
-                      <td className="py-2">Unknown</td>
+                      <td className="py-2">
+                        {proposal.cate === 'fund'
+                          ? 'Reuquest fund'
+                          : 'New Idea'}
+                      </td>
+                      <td className="py-2">
+                        {proposal.expiresAt.toDateString()}
+                      </td>
                       <td className="py-2">
                         <Link
                           href={`/proposal/${proposal.id}`}

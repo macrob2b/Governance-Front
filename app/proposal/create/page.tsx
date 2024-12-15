@@ -1,6 +1,6 @@
 'use client'
 import { getProgram } from '@/utils/connectAnchorProgram' // Adjust the path as needed
-import { web3, AnchorError, AnchorProvider } from '@project-serum/anchor'
+import { BN, web3, AnchorError, AnchorProvider } from '@project-serum/anchor'
 import { useState } from 'react'
 import { titleSchema, briefSchema } from '@/utils/validationSchemas'
 import { useWallet } from '@solana/wallet-adapter-react'
@@ -11,7 +11,9 @@ export default function CreateProposal() {
 
   const [isLoading, setIsLoading] = useState(false)
   const [title, setTitle] = useState('')
-  const [proposalType, setType] = useState('')
+  const [cate, setCate] = useState('')
+  const [reference, setReference] = useState('')
+  const [amount, setAmount] = useState(0)
   const [brief, setBreif] = useState('')
   const [notice, setNotice] = useState({ msg: '', type: '' })
 
@@ -54,8 +56,9 @@ export default function CreateProposal() {
       const proposal = web3.Keypair.generate()
 
       // Call the `submit proposal` instruction defined in the IDL
+      console.log('here' + reference)
       await program.methods
-        .createProposal(title, brief)
+        .createProposal(title, brief, cate, reference, new BN(amount))
         .accounts({
           proposal: proposal.publicKey,
           user: provider.wallet.publicKey,
@@ -90,27 +93,27 @@ export default function CreateProposal() {
             className="input input-bordered w-full mb-4"
           />
           <select
-            onChange={(e) => setType(e.target.value)}
+            onChange={(e) => setCate(e.target.value)}
             className="select select-bordered w-full  mb-4"
           >
             <option value="idea">Initil Idea</option>
             <option value="fund">Request Fund</option>
           </select>
 
-          {proposalType === 'fund' && (
+          {cate === 'fund' && (
             <div>
               <input
                 type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={reference}
+                onChange={(e) => setReference(e.target.value)}
                 placeholder="Initial Idea Id"
                 className="input input-bordered w-full mb-4"
               />
               <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Amount"
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(Number(e.target.value))}
+                placeholder="Amount($MB2B)"
                 className="input input-bordered w-full mb-4"
               />
             </div>
@@ -147,7 +150,7 @@ export default function CreateProposal() {
             href="/"
             className="btn btn-error btn-outline w-full mt-2"
           >
-            Cancel
+            Back
           </Link>
 
           <p
