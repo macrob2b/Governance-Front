@@ -7,10 +7,13 @@ import { useEffect, useState } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { PublicKey } from '@solana/web3.js'
 import Link from 'next/link'
+// import { getAccount, Token, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+
 interface Proposal {
   owner: string
   title: string
   brief: string
+  cate: string
   hasVoted: boolean
 }
 export default function ShowProposal() {
@@ -49,28 +52,35 @@ export default function ShowProposal() {
     try {
       const proposal = await program.account.proposal.fetch(proposalPublicKey)
 
-      const [pdaPublicKey] = await PublicKey.findProgramAddressSync(
-        [
-          Buffer.from('vote-record'),
-          proposalPublicKey.toBuffer(),
-          provider.wallet.publicKey.toBuffer()
-        ],
-        program.programId
-      )
+      let voteData = { hasVoted: false }
 
-      let voteData = { hasVoted: true }
-      try {
-        const proposalVote = await program.account.voteRecord.fetch(
-          pdaPublicKey
+      //Check user vote
+      if (publicKey) {
+        const [pdaPublicKey] = await PublicKey.findProgramAddressSync(
+          [
+            Buffer.from('vote-record'),
+            proposalPublicKey.toBuffer(),
+            provider.wallet.publicKey.toBuffer()
+          ],
+          program.programId
         )
-        voteData.hasVoted = proposalVote.hasVoted as boolean
-      } catch {
-        voteData.hasVoted = false
+
+        try {
+          const proposalVote = await program.account.voteRecord.fetch(
+            pdaPublicKey
+          )
+          voteData.hasVoted = proposalVote.hasVoted as boolean
+        } catch {
+          voteData.hasVoted = false
+        }
       }
+      //End check user vote
+
       return {
         owner: proposal.owner,
         title: proposal.title,
         brief: proposal.brief,
+        cate: proposal.cate,
         hasVoted: voteData.hasVoted
       } as Proposal
     } catch (err) {
@@ -142,30 +152,46 @@ export default function ShowProposal() {
               <div className="card-body">
                 <h2 className="card-title">
                   {details?.title}
-                  <div className="badge badge-secondary">NEW IDEA</div>
+                  <div
+                    className={`badge ${
+                      details?.cate === 'fund'
+                        ? 'badge-secondary'
+                        : 'badge-success'
+                    }`}
+                  >
+                    {details?.cate === 'fund' ? 'REQUEST FUND' : 'NEW IDEA'}
+                  </div>
                 </h2>
                 <p className=" break-words whitespace-pre-wrap">
                   {details?.brief}
                 </p>
                 <div className="card-actions justify-end">
-                  {!details?.hasVoted ? (
+                  {publicKey ? (
                     <div>
-                      <button
-                        onClick={() => voteProposal()}
-                        className="btn btn-outline btn-success mr-1 "
-                      >
-                        Agree
-                      </button>
-                      <button
-                        onClick={() => voteProposal()}
-                        className="btn btn-outline btn-error"
-                      >
-                        Disagree
-                      </button>
+                      {!details?.hasVoted ? (
+                        <div>
+                          <button
+                            onClick={() => voteProposal()}
+                            className="btn btn-outline btn-success mr-1 "
+                          >
+                            Agree
+                          </button>
+                          <button
+                            onClick={() => voteProposal()}
+                            className="btn btn-outline btn-error"
+                          >
+                            Disagree
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="text-bold text-amber-900 font-bold	">
+                          You already voted
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="text-bold text-amber-900 font-bold	">
-                      You already voted
+                      Connect your wallet to vote
                     </div>
                   )}
                 </div>
