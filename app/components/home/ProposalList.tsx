@@ -122,9 +122,7 @@ export default function ProposalList() {
                     <tr key={index}>
                       <td className="py-1">{proposal.title}</td>
                       <td className="py-2">
-                        {proposal.cate === 'fund'
-                          ? 'Reuquest fund'
-                          : 'New Idea'}
+                        {proposal.cate === 'fund' ? 'Request fund' : 'New Idea'}
                       </td>
                       <td className="py-2">
                         {proposal.expiresAt.toDateString()}
