@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { PublicKey } from '@solana/web3.js'
 import Link from 'next/link'
+//
 // import { getAccount, Token, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 
 interface Proposal {
