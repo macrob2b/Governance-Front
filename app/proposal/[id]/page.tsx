@@ -90,6 +90,14 @@ export default function ShowProposal() {
     }
   }
 
+  function convertUrlsToLinks(text: string) {
+    const urlRegex = /https:\/\/[^\s]+/g // Regular expression to match https URLs
+    return text.replace(
+      urlRegex,
+      (url) => `<a href="${url}" target="_blank">${url}</a>`
+    )
+  }
+
   //Submti vote
   const voteProposal = async () => {
     setVoteLoading(true)
@@ -196,9 +204,13 @@ export default function ShowProposal() {
                     {details?.cate === 'fund' ? 'REQUEST FUND' : 'NEW IDEA'}
                   </div>
                 </h2>
-                <p className=" break-words whitespace-pre-wrap">
-                  {details?.brief}
-                </p>
+                <div
+                  className=" break-words whitespace-pre-wrap"
+                  dangerouslySetInnerHTML={{
+                    __html: convertUrlsToLinks(details ? details.brief : '')
+                  }}
+                />
+
                 <div className="card-actions justify-end">
                   {publicKey ? (
                     <div>

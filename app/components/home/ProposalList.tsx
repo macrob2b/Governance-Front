@@ -108,7 +108,7 @@ export default function ProposalList() {
               >
                 {notice?.msg}
               </p>
-              <table className="w-full lg:w-1/2 table-auto mx-auto mb-14">
+              <table className="w-full  table-auto mx-auto mb-14">
                 <thead>
                   <tr>
                     <th className="text-left min-w-[180px]">Title</th>
@@ -120,7 +120,7 @@ export default function ProposalList() {
                 <tbody>
                   {proposals.map((proposal, index) => (
                     <tr key={index}>
-                      <td className="py-1">{proposal.title}</td>
+                      <td className="pl-1 pr-4">{proposal.title}</td>
                       <td className="py-2">
                         {proposal.cate === 'fund' ? 'Request fund' : 'New Idea'}
                       </td>
