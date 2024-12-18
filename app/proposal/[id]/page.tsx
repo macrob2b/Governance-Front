@@ -7,8 +7,7 @@ import { useEffect, useState } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { PublicKey } from '@solana/web3.js'
 import Link from 'next/link'
-//
-// import { getAccount, Token, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { getAccount } from '@solana/spl-token'
 
 interface Proposal {
   owner: string
@@ -94,6 +93,44 @@ export default function ShowProposal() {
   //Submti vote
   const voteProposal = async () => {
     setVoteLoading(true)
+
+    const program = getProgram()
+    const mintAccountPublicKey = new PublicKey(
+      'Gp9mkCEQHUf3EH9BknVehSNZ3NR4qQXbzdSYtHGDARb8'
+    )
+    if (publicKey)
+      try {
+        let response =
+          await program.provider.connection.getParsedTokenAccountsByOwner(
+            publicKey,
+            {
+              mint: mintAccountPublicKey
+            }
+          )
+
+        let amount = 0
+        let tokenDecimal = 9
+        response.value.forEach((accountInfo) => {
+          tokenDecimal = Number(
+            accountInfo.account.data['parsed']['info']['tokenAmount'][
+              'decimals'
+            ]
+          )
+          amount += Number(
+            accountInfo.account.data['parsed']['info']['tokenAmount']['amount']
+          )
+        })
+
+        cont 
+
+        console.log(amount)
+        console.log(Math.pow(10, tokenDecimal))
+        console.log(amount / Math.pow(10, tokenDecimal))
+      } catch (err) {
+        console.log(err)
+      }
+
+    return
 
     try {
       const program = getProgram()
