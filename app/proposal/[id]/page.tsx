@@ -121,16 +121,12 @@ export default function ShowProposal() {
           )
         })
 
-        cont 
-
         console.log(amount)
         console.log(Math.pow(10, tokenDecimal))
         console.log(amount / Math.pow(10, tokenDecimal))
       } catch (err) {
         console.log(err)
       }
-
-    return
 
     try {
       const program = getProgram()
