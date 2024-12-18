@@ -11,4 +11,4 @@ export const titleSchema = z.string()
 export const briefSchema = z.string()
     .min(150, { message: 'Brief must be at least 150 characters long.' })
     .max(800, { message: 'Brief must not exceed 800 characters.' })
-    .regex(/^[\w\s.,'"\-()?!:;@&%$#+*/\\\[\]\n]+$/, { message: "Brief can only contain letters, numbers, spaces, and standard punctuation." });
+  
