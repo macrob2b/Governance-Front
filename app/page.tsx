@@ -16,7 +16,7 @@ export default function Home() {
           <a
             className="btn btn-success"
             target="_blank"
-            href="https://jup.ag/swap/USDC-BdLaNH3m6da2jXkx6XpGwLkUEKB4EbQWxLxntv5BuvAn"
+            href="https://www.orca.so/?tokenIn=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&tokenOut=BdLaNH3m6da2jXkx6XpGwLkUEKB4EbQWxLxntv5BuvAn"
           >
             Buy MB2B Token
           </a>
