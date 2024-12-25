@@ -88,6 +88,10 @@
         {
           "name": "agree",
           "type": "bool"
+        },
+        {
+          "name": "votePower",
+          "type": "u64"
         }
       ]
     }
@@ -161,6 +165,10 @@
           {
             "name": "vote",
             "type": "string"
+          },
+          {
+            "name": "votePower",
+            "type": "u64"
           }
         ]
       }
@@ -176,6 +184,11 @@
       "code": 6001,
       "name": "AlreadyVoted",
       "msg": "Already voted!"
+    },
+    {
+      "code": 6002,
+      "name": "ExpiredProposal",
+      "msg": "The Proposal Has Already Expired"
     }
   ]
 }
