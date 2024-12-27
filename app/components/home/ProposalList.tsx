@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { PublicKey } from '@solana/web3.js'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useEffect, useState, useCallback, useRef } from 'react'
+import dayjs from 'dayjs'
 interface Proposal {
   id: PublicKey
   owner: PublicKey
@@ -17,6 +18,9 @@ interface Proposal {
   amount: string
   createdAt: Date
   expiresAt: Date
+  resultStatus: string
+  agreeVotes: number
+  disagreeVotes: number
 }
 
 export default function ProposalList() {
@@ -37,8 +41,6 @@ export default function ProposalList() {
       // Fetch all accounts for the program where the owner is the user's public key
       const proposals = await program.account.proposal.all()
 
-      console.log(proposals)
-
       const proposalArray: Proposal[] = proposals.map(
         (proposal: ProgramAccount<any>) => ({
           id: proposal.publicKey,
@@ -49,13 +51,24 @@ export default function ProposalList() {
           reference: proposal.account.reference,
           amount: proposal.account.amount,
           createdAt: new Date(proposal.account.createdAt.toNumber() * 1000),
-          expiresAt: new Date(proposal.account.expiresAt.toNumber() * 1000)
+          expiresAt: new Date(proposal.account.expiresAt.toNumber() * 1000),
+          agreeVotes: proposal.account.agreeVotes,
+          disagreeVotes: proposal.account.disagreeVotes,
+          resultStatus:
+            dayjs(new Date()).unix() < proposal.account.expiresAt
+              ? 'Active'
+              : proposal.account.agreeVotes.toNumber() >
+                proposal.account.disagreeVotes.toNumber()
+              ? 'Passed'
+              : 'Rejected'
         })
       )
 
-      console.log(proposalArray)
+      const sortedProposals = proposalArray.sort((a, b) => {
+        return b.createdAt.getTime() - a.createdAt.getTime()
+      })
 
-      setProposals(proposalArray)
+      setProposals(sortedProposals)
     } catch (error) {
       console.error('Failed to fetch proposals:', error)
     } finally {
@@ -114,6 +127,7 @@ export default function ProposalList() {
                     <th className="text-left min-w-[180px]">Title</th>
                     <th className="text-left min-w-[180px]">Type</th>
                     <th className="text-left min-w-[200px]">Expiry Date</th>
+                    <th className="text-left min-w-[200px]">Result</th>
                     <th className="text-left min-w-[180px]">Action</th>
                   </tr>
                 </thead>
@@ -122,11 +136,35 @@ export default function ProposalList() {
                     <tr key={index}>
                       <td className="pl-1 pr-4">{proposal.title}</td>
                       <td className="py-2">
-                        {proposal.cate === 'fund' ? 'Request fund' : 'New Idea'}
+                        <div
+                          className={`badge ${
+                            proposal.cate === 'fund'
+                              ? 'badge-secondary'
+                              : 'badge-success'
+                          }`}
+                        >
+                          {proposal.cate === 'fund'
+                            ? 'Request fund'
+                            : 'New Idea'}
+                        </div>
                       </td>
                       <td className="py-2">
                         {proposal.expiresAt.toDateString()}
                       </td>
+                      <td>
+                        <div
+                          className={`badge ${
+                            proposal.resultStatus === 'Active'
+                              ? 'badge-primary'
+                              : proposal.resultStatus == 'Passed'
+                              ? 'badge-success'
+                              : 'badge-error'
+                          }`}
+                        >
+                          {proposal.resultStatus}
+                        </div>
+                      </td>
+
                       <td className="py-2">
                         <Link
                           href={`/proposal/${proposal.id}`}
@@ -137,7 +175,8 @@ export default function ProposalList() {
                         {
                           <span>
                             {publicKey?.toBase58() ===
-                            proposal.owner.toBase58() ? (
+                              proposal.owner.toBase58() &&
+                            proposal.resultStatus !== 'Passed' ? (
                               <button
                                 onClick={() => deleteProposal(proposal.id)}
                                 className="btn btn-outline btn-xs btn-error "
